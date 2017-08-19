@@ -5,7 +5,6 @@ options head
 	#!/bin/${1:sh}
 	${0}
 
-
 snippet if
 	if [ ${1:#:condition} ]; then
 		${0:TARGET}
@@ -47,8 +46,7 @@ alias   h <<
 	$1
 
 snippet env
-	#!/usr/bin/env ${1}
-
+	#!/usr/bin/env ${1:bash}
 
 snippet tmp
 	${1:TMPFILE}=$(mktemp ${2:XXX})
@@ -94,5 +92,41 @@ snippet     abort
 options     head
 	echo "${0:TARGET}" 1>&2
 	exit 1
+
+snippet     abort_on_error
+abbr        # Exit on any non-zero status.
+options     head
+	# Exit on any non-zero status.
+	trap 'exit' ERR
+	set -E
+	${1}
+
+snippet     title
+abbr        echo "### Title ###"
+options     head
+	echo "### ${1:Title} ###"
+
+snippet     root
+abbr        # Ensure that run as root
+options     head
+	# Ensure that run as root
+	if [ "$EUID" -ne 0 ]
+		then echo "This program must be run with administrator privileges.  Aborting"
+		exit
+	fi
+	${1}
+
+snippet     go_to_bash_dir
+abbr        # Go to the directory where the bash file is
+options     head
+	# Go to the directory where the bash file is
+	cd "$(dirname "$0")"
+	echo "- Running from $(pwd)"
+	${1}
+
+snippet     mkdir_if_not_exist
+abbr        Make dir recursivelly if does not exist
+options     head
+	mkdir -p ${0:TARGET}
 
 # vim: set noexpandtab :
