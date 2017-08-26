@@ -1,3 +1,11 @@
 include ./markdown.snip
 
-
+snippet header
+options head
+  ---
+  title: '${1:#:Title}'
+  subtitle: '${2:#:SubTitle}'
+  author: '${3:#:Author}'
+  date: '${4:#:MM.DD.YYYY}'
+  abstract: '${5:#:abstract}'
+  ...
